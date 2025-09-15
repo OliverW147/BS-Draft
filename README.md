@@ -2,6 +2,8 @@
 
 **A strategic drafting companion for Brawl Stars.**
 
+![Draft simulator screenshot](example.png)
+
 **Important:** Because recommendations are produced by an MCTS guided by a heuristic evaluator derived from historical statistics, the tool provides *statistically strong picks on average* — useful guidance for robust choices — but it does not guarantee optimal picks for every individual draft or rare tactical situations.
 
 This application analyses preprocessed statistical data from a binary cache file (`stats.pack`) to provide insights and recommendations during character selection. It prioritises high‑rank games, offers both fast heuristic suggestions and deeper Monte Carlo Tree Search (MCTS) analysis, and exposes a GUI draft simulator to test picks and bans interactively.
