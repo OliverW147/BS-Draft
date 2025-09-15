@@ -996,20 +996,21 @@ void MainWindow::displayMctsScores(const QVector<MCTSResult>& results, bool isIn
               .arg("Brawler", -18).arg("Visits", 8).arg("Est Win %", 10);
     stream << QString("-").repeated(42) << "\n";
 
-    int displayCount = m_config.mctsResultCount();
-    int count = 0;
+    // int displayCount = m_config.mctsResultCount(); // <-- REMOVE or comment out this line
+    // int count = 0; // <-- REMOVE or comment out this line
+
     for (const auto& result : results) {
-        if (count >= displayCount) break;
-        double winPercent = result.winRate * 100.0;
+        // if (count >= displayCount) break; // <-- REMOVE or comment out this line
+        double winPercent = (result.winRate * 100.0) - 3;
         stream << QString("%1 | %2 | %3%\n")
                   .arg(result.move, -18)
                   .arg(result.visits, 8)
                   .arg(winPercent, 9, 'f', 1);
-        count++;
+        // count++; // <-- REMOVE or comment out this line
     }
-    if (results.size() > displayCount) {
-         stream << "\n... (Top " << displayCount << " shown)";
-    }
+    // if (results.size() > displayCount) { // <-- REMOVE or comment out this block
+    //      stream << "\n... (Top " << displayCount << " shown)";
+    // }
 
     m_scoresTextEdit->setFontFamily("monospace");
     m_scoresTextEdit->setText(text);

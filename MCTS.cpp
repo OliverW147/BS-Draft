@@ -447,15 +447,9 @@ QVector<MCTSResult> MCTSManager::getMctsResults(std::shared_ptr<MCTSNode> rootNo
 
     // Sort results
     std::sort(results.begin(), results.end(), [](const MCTSResult& a, const MCTSResult& b) {
-        if (a.visits != b.visits) return a.visits > b.visits;
-        return a.winRate > b.winRate;
+        if (a.winRate != b.winRate) return a.winRate > b.winRate;
+        return a.visits > b.visits;
     });
-
-    // Limit results
-    int limit = m_config.mctsResultCount();
-    if (results.size() > limit) {
-        results.resize(limit);
-    }
 
     return results;
 }

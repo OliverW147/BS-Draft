@@ -8,6 +8,7 @@
 #include <QDataStream>
 #include <limits>
 #include <atomic>
+#include <QMetaType>
 
 // --- Basic Stats Structs ---
 
@@ -77,6 +78,7 @@ struct HeuristicWeights {
     double pickRate = 0.2;
 };
 
+Q_DECLARE_METATYPE(HeuristicWeights);
 struct HeuristicScoreComponents {
     double totalScore = -std::numeric_limits<double>::infinity();
     double winRate = 0.0;

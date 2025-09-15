@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QSet>
 #include <QSharedPointer> // For potential use if state needs shared ownership
+#include <QMetaType>
 
 #include "DataStructures.h" // Not directly needed, but good practice
 

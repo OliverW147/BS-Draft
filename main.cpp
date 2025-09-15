@@ -5,8 +5,10 @@
 #include "MCTS.h"
 #include "CacheUtils.h"
 #include "DataStructures.h"
+#include "DraftState.h"
 
 #include <QApplication>
+#include <QMetaType>
 #include <QMessageBox>
 #include <QDebug>
 #include <QDir>
@@ -85,6 +87,9 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 int main(int argc, char *argv[]) {
     // MUST be first Qt object created
     QApplication app(argc, argv);
+
+    qRegisterMetaType<DraftState>("DraftState");
+    qRegisterMetaType<HeuristicWeights>("HeuristicWeights"); // <--- ADD THIS LINE HERE
 
     // Install logger AFTER app exists
     qInstallMessageHandler(messageHandler);
