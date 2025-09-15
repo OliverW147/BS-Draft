@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     // Now get application directory path safely
     const QString appDirPath = QCoreApplication::applicationDirPath();
 
-    app.setOrganizationName("TexeshApps");
+    app.setOrganizationName("TexApps");
     app.setApplicationName("GlizzyDraft");
 
     qInfo() << "===================================";
