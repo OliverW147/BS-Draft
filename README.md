@@ -4,29 +4,29 @@
 
 **Important:** Because recommendations are produced by an MCTS guided by a heuristic evaluator derived from historical statistics, the tool provides *statistically strong picks on average* — useful guidance for robust choices — but it does not guarantee optimal picks for every individual draft or rare tactical situations.
 
-This application analyses a large dataset of historical game results to provide statistical insights and intelligent recommendations during character selection. It prioritises high‑rank games, offers both fast heuristic suggestions and deeper Monte Carlo Tree Search (MCTS) analysis, and exposes a GUI draft simulator to test picks and bans interactively.
+This application analyses preprocessed statistical data from a binary cache file (`stats.pack`) to provide insights and recommendations during character selection. It prioritises high‑rank games, offers both fast heuristic suggestions and deeper Monte Carlo Tree Search (MCTS) analysis, and exposes a GUI draft simulator to test picks and bans interactively.
 
 ---
 
 ## Features
 
-* **Comprehensive data analysis** — processes a `.jsonl` file containing thousands of game results to build a robust statistical model.
+* **Comprehensive data analysis** — powered by aggregated statistics stored in `stats.pack`.
 * **Rank‑weighted statistics** — gives more weight to higher‑rank games to reflect competitive meta trends.
-* **Efficient caching** — computed statistics are saved to a binary cache file for near‑instant subsequent startups.
+* **Efficient caching** — `stats.pack` is precomputed and updated periodically, allowing near‑instant application startup.
 * **Interactive draft simulator** — full GUI to simulate a draft with picks, bans and undo/redo controls.
 * **Dual suggestion modes**:
 
   * *Heuristic Suggestions* — instant recommendations using a weighted formula (win rate, synergy, counters, pick rate).
   * *MCTS Deep Analysis* — multi‑threaded Monte Carlo Tree Search for forward‑looking evaluation.
 * **Ban recommendations** — suggests impactful bans for the selected map/mode.
-* **Full draft control** — undo picks, unban characters, reset draft state.
+* **Full draft control** — undo picks, unban characters, reset draft.
 * **Configurable parameters** — tweak heuristic weights and MCTS settings via `draft_config.ini`.
 
 ---
 
 ## How it works
 
-The application is driven by a preprocessed binary cache file (`stats.pack`) that contains aggregated, rank‑weighted statistics derived from historical games. The GUI and both suggestion modes (heuristic and MCTS) read from this cache to power simulations and recommendations. If `stats.pack` is missing on first run, the app will generate it from the raw dataset; subsequent launches load the cache for fast startup.
+The application reads from a precomputed binary cache file (`stats.pack`) containing aggregated, rank‑weighted statistics derived from historical games. All simulator and suggestion features extract information from this cache. The application requires `stats.pack` to run, and new versions of the file can be distributed periodically to update the statistics.
 
 ---
 
@@ -65,22 +65,15 @@ The final executable will be placed in the build output directory (e.g. `build/`
 
 ## Usage
 
-1. **Place the data file**
+1. **Provide the stats cache**
 
-   The application requires a data file named **`high_level_ranked_games.jsonl`** in the same directory as the executable. The app will refuse to start without it.
+   The application requires a binary cache file named **`stats.pack`** in the same directory as the executable. The app will refuse to start without it.
 
 2. **First run**
 
-   On first launch the app will process the entire `.jsonl` file. This may take several minutes depending on file size and system performance. The app will create:
+   If `stats.pack` is missing, it must be generated externally and placed in the directory. The app reads this file to populate all internal statistics for simulation and recommendations.
 
-   * `stats.pack` (binary cache of processed statistics)
-   * `draft_log.log` (processing and runtime log)
-
-3. **Subsequent runs**
-
-   After the cache is created the app will load `stats.pack` and the main window will appear almost instantly.
-
-4. **Simulator controls**
+3. **Simulator controls**
 
    * Select **Mode** and **Map** from the dropdowns to begin a draft.
    * Use the **Available Brawlers** list to pick a character.
@@ -116,7 +109,6 @@ ExplorationConstant = 1.414
 MaxDepth = 32
 
 [Paths]
-DataFile = high_level_ranked_games.jsonl
 CacheFile = stats.pack
 
 ```
@@ -129,23 +121,9 @@ CacheFile = stats.pack
 
 ---
 
-## Data format
-
-Each line of `high_level_ranked_games.jsonl` should be one JSON object representing a single game. The exact schema depends on your data export but must include at minimum:
-
-* teams and their character IDs/names
-* result/winner
-* player ranks (for rank weighting)
-* map/mode identifiers
-
-If you need a schema example, open an issue in the repository or check the `data/schema/` directory (if present).
-
----
-
 ## Troubleshooting
 
-* **App refuses to start**: ensure `high_level_ranked_games.jsonl` is present in the executable directory.
-* **First run takes a long time**: processing is expected; subsequent runs load `stats.pack`.
+* **App refuses to start**: ensure `stats.pack` is present in the executable directory.
 * **MCTS runs too long or uses all CPU**: lower `MctsTimeLimit` or `Threads` in `draft_config.ini`.
 * **Results look noisy**: increase `SmoothingK` or raise `PickRateThreshold` to ignore very rare picks.
 
@@ -153,7 +131,7 @@ If you need a schema example, open an issue in the repository or check the `data
 
 ## Contributing
 
-Contributions and bug reports are welcome. Please open issues or pull requests against the repository. If you're adding data or changing the schema, include an updated schema file and a small sample dataset for testing.
+Contributions and bug reports are welcome. Please open issues or pull requests against the repository.
 
 ---
 
